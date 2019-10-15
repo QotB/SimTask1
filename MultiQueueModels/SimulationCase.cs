@@ -31,7 +31,7 @@ namespace MultiQueueModels
             ArrivalTime = 0;
             RandomService = 0;
             ServiceTime = 0;
-            this.AssignedServer = new Server();
+            this.AssignedServer = new Server(); ;
             StartTime = 0;
             EndTime = 0;
 

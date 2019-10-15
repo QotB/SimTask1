@@ -95,3 +95,14 @@ E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueSimul
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.csproj.GenerateResource.Cache
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.exe
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueSimulation.exe.config
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueSimulation.exe
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueSimulation.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueModels.dll
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueModels.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.csprojResolveAssemblyReference.cache
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.Form1.resources
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.Properties.Resources.resources
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.csproj.GenerateResource.Cache
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.exe
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.pdb

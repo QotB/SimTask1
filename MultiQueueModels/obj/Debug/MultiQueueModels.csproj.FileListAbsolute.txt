@@ -38,3 +38,8 @@ E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueModel
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueModels\bin\Debug\MultiQueueModels.pdb
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueModels\obj\Debug\MultiQueueModels.dll
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\MultiQueueModels\obj\Debug\MultiQueueModels.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\bin\Debug\MultiQueueModels.dll
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\bin\Debug\MultiQueueModels.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.dll
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.pdb
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.csprojResolveAssemblyReference.cache

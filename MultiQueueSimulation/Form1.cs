@@ -133,7 +133,7 @@ namespace MultiQueueSimulation
                     int mnn = 10000000;
                     foreach (Server ser in sys.Servers)
                     {
-                        ser.Utilization = (decimal)(ser.TotalWorkingTime) / Math.Max(1,total_run);
+                        ser.Utilization = (decimal)(ser.TotalWorkingTime);
                         if (ser.FinishTime <= cas.ArrivalTime)
                         {
                             mn = Math.Min(mn, ser.Utilization);
@@ -169,7 +169,7 @@ namespace MultiQueueSimulation
                     else
                     {
                         sers = new System.Collections.Generic.List<Server>();
-                        mn = 10000000 ;
+                        mn = 10000000;
                         foreach (Server ser in sys.Servers)
                         {
                             if (ser.FinishTime == mnn)
@@ -192,7 +192,7 @@ namespace MultiQueueSimulation
                             if (cas.ArrivalTime >= queu[i])
                                 queu.RemoveAt(i);
                         }
-                       
+
                         queu.Add(mnn);
                         cas.ServiceTime = get2(cas.RandomService, sys.Servers[ind]);
                         cas.TimeInQueue = sys.Servers[ind].FinishTime - cas.ArrivalTime;
@@ -212,7 +212,7 @@ namespace MultiQueueSimulation
 
                 sys.SimulationTable.Add(cas);
                 total_run = Math.Max(total_run, cas.EndTime);
-                
+
             }
             per.WaitingProbability = per.WaitingProbability / (sys.SimulationTable.Count);
             per.AverageWaitingTime = per.AverageWaitingTime / (sys.SimulationTable.Count);
@@ -296,7 +296,7 @@ namespace MultiQueueSimulation
         }
         public void read_file()
         {
-            string[] lines = System.IO.File.ReadAllLines(Constants.FileNames.TestCase1); // read lines 
+            string[] lines = System.IO.File.ReadAllLines("TestCase1.txt"); // read lines 
             sys.NumberOfServers = int.Parse(lines[1]);
             sys.StoppingNumber = int.Parse(lines[4]);
             if (lines[7] == "1")

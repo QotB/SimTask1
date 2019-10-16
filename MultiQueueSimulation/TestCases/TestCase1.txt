@@ -5,10 +5,10 @@ StoppingNumber
 100
 
 StoppingCriteria
-2
+1
 
 SelectionMethod
-1
+3
 
 InterarrivalDistribution
 1, 0.25

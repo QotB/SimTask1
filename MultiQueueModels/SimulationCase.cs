@@ -20,6 +20,7 @@ namespace MultiQueueModels
         public int RandomService { get; set; }
         public int ServiceTime { get; set; }
         public Server AssignedServer { get; set; }
+        public int idd { get; set; }
         public int StartTime { get; set; }
         public int EndTime { get; set; }
         public int TimeInQueue { get; set; }

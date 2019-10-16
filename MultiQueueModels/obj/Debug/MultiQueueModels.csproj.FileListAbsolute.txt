@@ -42,4 +42,3 @@ E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQ
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\bin\Debug\MultiQueueModels.pdb
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.dll
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.pdb
-E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueModels\obj\Debug\MultiQueueModels.csprojResolveAssemblyReference.cache

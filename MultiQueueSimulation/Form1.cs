@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MultiQueueModels;
 using MultiQueueTesting;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 namespace MultiQueueSimulation
 {
@@ -21,7 +23,7 @@ namespace MultiQueueSimulation
         }
         public static SimulationSystem sys;
         public static PerformanceMeasures per;
-        public static decimal total_run;
+        public static decimal total_run = 0;
         public void Form1_Load()
         {
             init();
@@ -32,7 +34,7 @@ namespace MultiQueueSimulation
             dataGridView2.DataSource = sys.InterarrivalDistribution;
             string test = TestingManager.Test(sys, Constants.FileNames.TestCase1);
             MessageBox.Show(test);
-            
+
         }
         void start()
         {
@@ -41,6 +43,8 @@ namespace MultiQueueSimulation
             per.WaitingProbability = 0;
             per.MaxQueueLength = 0;
             int queue = 0;
+            List<int> queu = new List<int>();
+
             Random rnd = new Random();
             Random rnd2 = new Random();
             while (true)
@@ -52,17 +56,19 @@ namespace MultiQueueSimulation
                         break;
                 }
                 SimulationCase cas = new SimulationCase(cid);
-                cas.RandomInterArrival = rnd.Next(1 , 101);
+                cas.RandomInterArrival = rnd.Next(1, 101);
                 cas.InterArrival = get1(cas.RandomInterArrival);
                 if (cid == 1)
                 {
-                    cas.RandomInterArrival = 1;
-                    cas.InterArrival = 1;
                     cas.ArrivalTime = 0;
                 }
                 else
                 {
                     cas.ArrivalTime = cas.InterArrival + sys.SimulationTable[cid - 2].ArrivalTime;
+                }
+                if (sys.StoppingCriteria == Enums.StoppingCriteria.SimulationEndTime)
+                {
+                    if (stop(cas.ArrivalTime)) break;
                 }
                 cas.RandomService = rnd2.Next(1, 101);
                 cas.TimeInQueue = -1;
@@ -73,7 +79,7 @@ namespace MultiQueueSimulation
                         if (sys.Servers[i].FinishTime <= cas.ArrivalTime)
                         {
                             sys.Servers[i].idle += Math.Abs(cas.ArrivalTime - sys.Servers[i].FinishTime);
-                            cas.ServiceTime = get2(cas.RandomService , sys.Servers[i]);
+                            cas.ServiceTime = get2(cas.RandomService, sys.Servers[i]);
                             cas.TimeInQueue = 0;
                             sys.Servers[i].FinishTime = cas.ArrivalTime + cas.ServiceTime;
                             cas.StartTime = cas.ArrivalTime;
@@ -81,13 +87,20 @@ namespace MultiQueueSimulation
                             cas.AssignedServer = sys.Servers[i];
                             sys.Servers[i].TotalWorkingTime += cas.ServiceTime;
                             sys.Servers[i].customers++;
-                            queue = 0 ;
+                            queue = 0;
+                            cas.idd = sys.Servers[i].ID;
+
                             break;
                         }
                     }
                     if (cas.TimeInQueue == -1)
                     {
-                        int mn = 1000000000 , ind = 0;
+                        for (int i = 0; i < queu.Count; i++)
+                        {
+                            if (cas.ArrivalTime >= queu[i])
+                                queu.RemoveAt(i);
+                        }
+                        int mn = 1000000000, ind = 0;
                         queue++;
                         for (int i = 0; i < sys.NumberOfServers; i++)
                         {
@@ -97,26 +110,111 @@ namespace MultiQueueSimulation
                                 ind = i;
                             }
                         }
+                        queu.Add(mn);
                         cas.ServiceTime = get2(cas.RandomService, sys.Servers[ind]);
-                        cas.TimeInQueue = sys.Servers[ind].FinishTime - cas.ArrivalTime ;
+                        cas.TimeInQueue = sys.Servers[ind].FinishTime - cas.ArrivalTime;
                         sys.Servers[ind].FinishTime = mn + cas.ServiceTime;
-                        cas.StartTime = mn ;
+                        cas.StartTime = mn;
                         cas.EndTime = mn + cas.ServiceTime;
                         cas.AssignedServer = sys.Servers[ind];
-                        per.AverageWaitingTime += cas.TimeInQueue ;
+                        per.AverageWaitingTime += cas.TimeInQueue;
                         per.WaitingProbability++;
                         sys.Servers[ind].TotalWorkingTime += cas.ServiceTime;
                         sys.Servers[ind].customers++;
+                        cas.idd = sys.Servers[ind].ID;
+
                     }
-                    per.MaxQueueLength = Math.Max(per.MaxQueueLength, queue);
-                    per.MaxQueueLength = Math.Min(per.MaxQueueLength, sys.NumberOfServers);
+                    per.MaxQueueLength = Math.Max(per.MaxQueueLength, queu.Count);
+                }
+                else if (sys.SelectionMethod == Enums.SelectionMethod.LeastUtilization)
+                {
+                    List<Server> sers = new System.Collections.Generic.List<Server>();
+                    decimal mn = 10000000;
+                    int mnn = 10000000;
+                    foreach (Server ser in sys.Servers)
+                    {
+                        ser.Utilization = (decimal)(ser.TotalWorkingTime) / Math.Max(1,total_run);
+                        if (ser.FinishTime <= cas.ArrivalTime)
+                        {
+                            mn = Math.Min(mn, ser.Utilization);
+                            sers.Add(ser);
+                        }
+                        mnn = Math.Min(mnn, ser.FinishTime);
+
+                    }
+                    if (sers.Count > 0)
+                    {
+                        int ind = 0;
+                        foreach (Server ser in sers)
+                        {
+                            if (ser.Utilization == mn)
+                            {
+                                ind = ser.ID - 1;
+                                break;
+                            }
+                        }
+                        sys.Servers[ind].idle += Math.Abs(cas.ArrivalTime - sys.Servers[ind].FinishTime);
+                        cas.ServiceTime = get2(cas.RandomService, sys.Servers[ind]);
+                        cas.TimeInQueue = 0;
+                        sys.Servers[ind].FinishTime = cas.ArrivalTime + cas.ServiceTime;
+                        cas.StartTime = cas.ArrivalTime;
+                        cas.EndTime = cas.ArrivalTime + cas.ServiceTime;
+                        cas.AssignedServer = sys.Servers[ind];
+                        sys.Servers[ind].TotalWorkingTime += cas.ServiceTime;
+                        sys.Servers[ind].customers++;
+                        cas.idd = sys.Servers[ind].ID;
+
+                        queue = 0;
+                    }
+                    else
+                    {
+                        sers = new System.Collections.Generic.List<Server>();
+                        mn = 10000000 ;
+                        foreach (Server ser in sys.Servers)
+                        {
+                            if (ser.FinishTime == mnn)
+                            {
+                                mn = Math.Min(mn, ser.Utilization);
+                                sers.Add(ser);
+                            }
+                        }
+                        int ind = 0;
+                        foreach (Server ser in sers)
+                        {
+                            if (ser.Utilization == mn)
+                            {
+                                ind = ser.ID - 1;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < queu.Count; i++)
+                        {
+                            if (cas.ArrivalTime >= queu[i])
+                                queu.RemoveAt(i);
+                        }
+                       
+                        queu.Add(mnn);
+                        cas.ServiceTime = get2(cas.RandomService, sys.Servers[ind]);
+                        cas.TimeInQueue = sys.Servers[ind].FinishTime - cas.ArrivalTime;
+                        sys.Servers[ind].FinishTime = mnn + cas.ServiceTime;
+                        cas.StartTime = mnn;
+                        cas.EndTime = mnn + cas.ServiceTime;
+                        cas.AssignedServer = sys.Servers[ind];
+                        per.AverageWaitingTime += cas.TimeInQueue;
+                        per.WaitingProbability++;
+                        sys.Servers[ind].TotalWorkingTime += cas.ServiceTime;
+                        sys.Servers[ind].customers++;
+                        cas.idd = sys.Servers[ind].ID;
+                    }
+                    per.MaxQueueLength = Math.Max(per.MaxQueueLength, queu.Count);
 
                 }
-                
+
                 sys.SimulationTable.Add(cas);
                 total_run = Math.Max(total_run, cas.EndTime);
+                
             }
-            per.WaitingProbability /= (sys.SimulationTable.Count);
+            per.WaitingProbability = per.WaitingProbability / (sys.SimulationTable.Count);
             per.AverageWaitingTime = per.AverageWaitingTime / (sys.SimulationTable.Count);
             sys.PerformanceMeasures = per;
             get_per();
@@ -127,8 +225,8 @@ namespace MultiQueueSimulation
             foreach (Server ser in sys.Servers)
             {
                 ser.AverageServiceTime = (decimal)(ser.TotalWorkingTime) / ser.customers;
-                ser.IdleProbability = ser.idle / ser.FinishTime ;
-                ser.Utilization = (decimal)(ser.TotalWorkingTime) / ser.FinishTime;
+                ser.IdleProbability = ((total_run - ser.FinishTime) + (decimal)ser.idle) / total_run;
+                ser.Utilization = (decimal)(ser.TotalWorkingTime) / total_run;
             }
 
         }
@@ -143,7 +241,7 @@ namespace MultiQueueSimulation
             }
             return 0;
         }
-        public int get2(int x , Server ser) // get arrival time for servers
+        public int get2(int x, Server ser) // get arrival time for servers
         {
             foreach (TimeDistribution tim in ser.TimeDistribution)
             {
@@ -154,18 +252,18 @@ namespace MultiQueueSimulation
             }
             return 0;
         }
-       public bool stop(int x)
+        public bool stop(int x)
         {
             if (x <= sys.StoppingNumber) return false;
             return true;
         }
-       public void init()
+        public void init()
         {
             sys = new SimulationSystem();
             per = new PerformanceMeasures();
             total_run = 0;
         }
-       public void build_tables()
+        public void build_tables()
         {
             // interarrival table ...
             sys.InterarrivalDistribution[0].CummProbability = sys.InterarrivalDistribution[0].Probability;
@@ -175,7 +273,7 @@ namespace MultiQueueSimulation
             {
                 sys.InterarrivalDistribution[i].CummProbability =
                     sys.InterarrivalDistribution[i - 1].CummProbability + sys.InterarrivalDistribution[i].Probability;
-                sys.InterarrivalDistribution[i].MinRange = sys.InterarrivalDistribution[i-1].MaxRange + 1;
+                sys.InterarrivalDistribution[i].MinRange = sys.InterarrivalDistribution[i - 1].MaxRange + 1;
                 sys.InterarrivalDistribution[i].MaxRange = (int)(sys.InterarrivalDistribution[i].CummProbability * 100);
             }
 
@@ -188,17 +286,17 @@ namespace MultiQueueSimulation
                 for (int i = 1; i < 4; i++)
                 {
                     sys.Servers[ii].TimeDistribution[i].CummProbability =
-                         sys.Servers[ii].TimeDistribution[i - 1].CummProbability +  sys.Servers[ii].TimeDistribution[i].Probability;
-                     sys.Servers[ii].TimeDistribution[i].MinRange =  sys.Servers[ii].TimeDistribution[i - 1].MaxRange + 1;
-                     sys.Servers[ii].TimeDistribution[i].MaxRange = (int)(sys.Servers[ii].TimeDistribution[i].CummProbability * 100);
+                         sys.Servers[ii].TimeDistribution[i - 1].CummProbability + sys.Servers[ii].TimeDistribution[i].Probability;
+                    sys.Servers[ii].TimeDistribution[i].MinRange = sys.Servers[ii].TimeDistribution[i - 1].MaxRange + 1;
+                    sys.Servers[ii].TimeDistribution[i].MaxRange = (int)(sys.Servers[ii].TimeDistribution[i].CummProbability * 100);
                 }
             }
 
-            
+
         }
-       public void read_file()
+        public void read_file()
         {
-            string[] lines = System.IO.File.ReadAllLines("TestCase1.txt"); // read lines 
+            string[] lines = System.IO.File.ReadAllLines(Constants.FileNames.TestCase1); // read lines 
             sys.NumberOfServers = int.Parse(lines[1]);
             sys.StoppingNumber = int.Parse(lines[4]);
             if (lines[7] == "1")
@@ -222,7 +320,7 @@ namespace MultiQueueSimulation
                 sys.SelectionMethod = Enums.SelectionMethod.LeastUtilization;
             }
             int i = 13;
-            for (; true ; i++)
+            for (; true; i++)
             {
                 if (lines[i] == "")
                     break;
@@ -234,7 +332,7 @@ namespace MultiQueueSimulation
                 tim.Probability = p;
                 sys.InterarrivalDistribution.Add(tim);
             }
-            for (int j = i+2 , ii = 1; ii <= sys.NumberOfServers; j+=6 , ii++)
+            for (int j = i + 2, ii = 1; ii <= sys.NumberOfServers; j += 6, ii++)
             {
                 int a = j;
                 Server ser = new Server(ii);

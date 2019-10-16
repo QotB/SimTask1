@@ -25,6 +25,7 @@ namespace MultiQueueModels
         public int TotalWorkingTime { get; set; }
         public decimal customers { get; set; }
         public decimal idle { get; set; }
+        
         public Server(int id)
         {
             ID = id;

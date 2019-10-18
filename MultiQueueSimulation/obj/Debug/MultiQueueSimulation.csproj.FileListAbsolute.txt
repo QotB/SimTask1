@@ -102,6 +102,7 @@ E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQ
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\bin\Debug\MultiQueueModels.pdb
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.csprojResolveAssemblyReference.cache
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.Form1.resources
+E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.Form2.resources
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.Properties.Resources.resources
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.csproj.GenerateResource.Cache
 E:\4th year\simulation\MultiQueueSimulation\MultiQueueSimulation\SimTask1\MultiQueueSimulation\obj\Debug\MultiQueueSimulation.exe

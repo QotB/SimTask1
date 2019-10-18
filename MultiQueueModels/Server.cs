@@ -25,7 +25,8 @@ namespace MultiQueueModels
         public int TotalWorkingTime { get; set; }
         public decimal customers { get; set; }
         public decimal idle { get; set; }
-        
+        public List<int> x;
+        public List<int> y;
         public Server(int id)
         {
             ID = id;
@@ -37,6 +38,8 @@ namespace MultiQueueModels
             this.TimeDistribution = new List<TimeDistribution>();
             customers = 0;
             idle = 0;
+            x = new List<int>();
+            y = new List<int>();
         }
     }
 }

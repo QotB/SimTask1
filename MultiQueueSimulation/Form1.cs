@@ -24,6 +24,7 @@ namespace MultiQueueSimulation
         public static SimulationSystem sys;
         public static PerformanceMeasures per;
         public static decimal total_run = 0;
+        
         public void Form1_Load()
         {
             init();
@@ -274,6 +275,11 @@ namespace MultiQueueSimulation
                     per.MaxQueueLength = Math.Max(per.MaxQueueLength, queu.Count);
 
                 }
+                for (int t = cas.StartTime; cas.StartTime <= 20 && t <= cas.EndTime; t++)
+                {
+                   sys.Servers[cas.AssignedServer.ID-1].x.Add(t);
+                   sys.Servers[cas.AssignedServer.ID - 1].y.Add(1);
+                }
                 sys.SimulationTable.Add(cas);
                 total_run = Math.Max(total_run, cas.EndTime);
 
@@ -288,7 +294,8 @@ namespace MultiQueueSimulation
         {
             foreach (Server ser in sys.Servers)
             {
-                ser.AverageServiceTime = (decimal)(ser.TotalWorkingTime) / ser.customers;
+                
+                ser.AverageServiceTime = (decimal)(ser.TotalWorkingTime) / (Math.Max(1,ser.customers));
                 ser.IdleProbability = ((total_run - ser.FinishTime) + (decimal)ser.idle) / total_run;
                 ser.Utilization = (decimal)(ser.TotalWorkingTime) / total_run;
             }
@@ -333,7 +340,7 @@ namespace MultiQueueSimulation
             sys.InterarrivalDistribution[0].CummProbability = sys.InterarrivalDistribution[0].Probability;
             sys.InterarrivalDistribution[0].MinRange = 1;
             sys.InterarrivalDistribution[0].MaxRange = (int)(sys.InterarrivalDistribution[0].Probability * 100);
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < sys.InterarrivalDistribution.Count() ; i++)
             {
                 sys.InterarrivalDistribution[i].CummProbability =
                     sys.InterarrivalDistribution[i - 1].CummProbability + sys.InterarrivalDistribution[i].Probability;
@@ -347,7 +354,7 @@ namespace MultiQueueSimulation
                 sys.Servers[ii].TimeDistribution[0].CummProbability = sys.Servers[ii].TimeDistribution[0].Probability;
                 sys.Servers[ii].TimeDistribution[0].MinRange = 1;
                 sys.Servers[ii].TimeDistribution[0].MaxRange = (int)(sys.Servers[ii].TimeDistribution[0].Probability * 100);
-                for (int i = 1; i < 4; i++)
+                for (int i = 1; i < sys.Servers[ii].TimeDistribution.Count() ; i++)
                 {
                     sys.Servers[ii].TimeDistribution[i].CummProbability =
                          sys.Servers[ii].TimeDistribution[i - 1].CummProbability + sys.Servers[ii].TimeDistribution[i].Probability;
@@ -396,23 +403,31 @@ namespace MultiQueueSimulation
                 tim.Probability = p;
                 sys.InterarrivalDistribution.Add(tim);
             }
-            for (int j = i + 2, ii = 1; ii <= sys.NumberOfServers; j += 6, ii++)
+            for (int j = i + 2, ii = 1; ii <= sys.NumberOfServers;  ii++)
             {
                 int a = j;
                 Server ser = new Server(ii);
 
-                for (int k = a; k < a + 4; k++)
+                for (int k = a; k < lines.Count() && lines[k] != "" ; k++)
                 {
-                    string[] line = lines[k].Split(',', ' ');
+                    string[] line = lines[k].Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                     int t = int.Parse(line[0]);
-                    decimal p = decimal.Parse(line[2]);
+                    decimal p = decimal.Parse(line[1]);
                     TimeDistribution tim = new TimeDistribution();
                     tim.Time = t;
                     tim.Probability = p;
                     ser.TimeDistribution.Add(tim);
+                    j++;
                 }
+                j+=2;
                 sys.Servers.Add(ser);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 f = new Form2(sys);
+            f.Show();
         }
 
     }

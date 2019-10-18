@@ -33,7 +33,7 @@ namespace MultiQueueSimulation
             start();
             dataGridView1.DataSource = sys.SimulationTable;
             dataGridView2.DataSource = sys.InterarrivalDistribution;
-            string test = TestingManager.Test(sys, Constants.FileNames.TestCase1);
+            string test = TestingManager.Test(sys, Constants.FileNames.TestCase3);
             MessageBox.Show(test);
 
         }
@@ -367,7 +367,7 @@ namespace MultiQueueSimulation
         }
         public void read_file()
         {
-            string[] lines = System.IO.File.ReadAllLines("TestCase1.txt"); // read lines 
+            string[] lines = System.IO.File.ReadAllLines("TestCase3.txt"); // read lines 
             sys.NumberOfServers = int.Parse(lines[1]);
             sys.StoppingNumber = int.Parse(lines[4]);
             if (lines[7] == "1")
